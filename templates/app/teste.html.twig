@@ -1,9 +1,33 @@
 {% extends '@layout/default.html.twig' %}
 
-{% block content %}
-    {{ data }} <br>
+{% block title %}Teste{% endblock %}
 
-    {% for category in categories %}
-        {{ category.name }} <br>
-    {% endfor %}
+{% block content %}
+    <h2 class="text-center">Lista de clientes</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Nome</th>
+            <th>E-mail</th>
+            <th>Cpf</th>
+            <th>Endereços</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {% for cli in clients %}
+            <tr>
+                <td>{{ cli.client.name }}</td>
+                <td>{{ cli.client.email }}</td>
+                <td>{{ cli.client.cpf }}</td>
+                <td>
+                    {{ cli.address }},
+                    {{ cli.city }} -
+                    {{ cli.state }} -
+                    {{ cli.zipcode }}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}
