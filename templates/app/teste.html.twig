@@ -3,29 +3,20 @@
 {% block title %}Teste{% endblock %}
 
 {% block content %}
-    <h2 class="text-center">Lista de clientes</h2>
+    <h2 class="text-center">Lista de contatos</h2>
     <table class="table">
         <thead>
         <tr>
             <th>Nome</th>
             <th>E-mail</th>
-            <th>Cpf</th>
-            <th>Endereços</th>
         </tr>
         </thead>
 
         <tbody>
-        {% for cli in clients %}
+        {% for customer in customers %}
             <tr>
-                <td>{{ cli.client.name }}</td>
-                <td>{{ cli.client.email }}</td>
-                <td>{{ cli.client.cpf }}</td>
-                <td>
-                    {{ cli.address }},
-                    {{ cli.city }} -
-                    {{ cli.state }} -
-                    {{ cli.zipcode }}
-                </td>
+                <td>{{ customer.name }}</td>
+                <td>{{ customer.email }}</td>
             </tr>
         {% endfor %}
         </tbody>

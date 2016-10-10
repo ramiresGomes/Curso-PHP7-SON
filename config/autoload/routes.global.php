@@ -1,15 +1,27 @@
 <?php
 
+use CodeEmailMKT\Application\Action\Customer\CustomerCreatePageAction;
+use CodeEmailMKT\Application\Action\Customer\CustomerCreatePageFactory;
+use CodeEmailMKT\Application\Action\Customer\CustomerListPageAction;
+use CodeEmailMKT\Application\Action\Customer\CustomerListPageFactory;
+use CodeEmailMKT\Application\Action\Customer\CustomerRemovePageAction;
+use CodeEmailMKT\Application\Action\Customer\CustomerRemovePageFactory;
+use CodeEmailMKT\Application\Action\Customer\CustomerUpdatePageAction;
+use CodeEmailMKT\Application\Action\Customer\CustomerUpdatePageFactory;
+
 return [
     'dependencies' => [
         'invokables' => [
             Zend\Expressive\Router\RouterInterface::class => Zend\Expressive\Router\AuraRouter::class,
-            CodeEmailMKT\Action\PingAction::class => CodeEmailMKT\Action\PingAction::class,
+            CodeEmailMKT\Application\Action\PingAction::class => CodeEmailMKT\Application\Action\PingAction::class,
         ],
         'factories' => [
-            CodeEmailMKT\Action\HomePageAction::class => CodeEmailMKT\Action\HomePageFactory::class,
-            CodeEmailMKT\Action\TestePageAction::class => CodeEmailMKT\Action\TestePageFactory::class,
-            CodeEmailMKT\Action\ExerciseOnePageAction::class => CodeEmailMKT\Action\ExerciseOnePageFactory::class,
+            CodeEmailMKT\Application\Action\HomePageAction::class => CodeEmailMKT\Application\Action\HomePageFactory::class,
+            CodeEmailMKT\Application\Action\TestePageAction::class => CodeEmailMKT\Application\Action\TestePageFactory::class,
+            CustomerListPageAction::class => CustomerListPageFactory::class,
+            CustomerCreatePageAction::class => CustomerCreatePageFactory::class,
+            CustomerUpdatePageAction::class => CustomerUpdatePageFactory::class,
+            CustomerRemovePageAction::class => CustomerRemovePageFactory::class,
         ],
     ],
 
@@ -17,26 +29,54 @@ return [
         [
             'name' => 'home',
             'path' => '/',
-            'middleware' => CodeEmailMKT\Action\HomePageAction::class,
+            'middleware' => CodeEmailMKT\Application\Action\HomePageAction::class,
             'allowed_methods' => ['GET'],
         ],
         [
             'name' => 'api.ping',
             'path' => '/api/ping',
-            'middleware' => CodeEmailMKT\Action\PingAction::class,
+            'middleware' => CodeEmailMKT\Application\Action\PingAction::class,
             'allowed_methods' => ['GET'],
         ],
         [
             'name' => 'teste',
             'path' => '/teste-aula',
-            'middleware' => CodeEmailMKT\Action\TestePageAction::class,
+            'middleware' => CodeEmailMKT\Application\Action\TestePageAction::class,
             'allowed_methods' => ['GET'],
         ],
         [
-            'name' => 'exercise.one',
-            'path' => '/teste',
-            'middleware' => CodeEmailMKT\Action\ExerciseOnePageAction::class,
+            'name' => 'customer.list',
+            'path' => '/admin/customers',
+            'middleware' => CustomerListPageAction::class,
             'allowed_methods' => ['GET'],
+        ],
+        [
+            'name' => 'customer.create',
+            'path' => '/admin/customer/create',
+            'middleware' => CustomerCreatePageAction::class,
+            'allowed_methods' => ['GET', 'POST'],
+        ],
+        [
+            'name' => 'customer.update',
+            'path' => '/admin/customer/update/{id}',
+            'middleware' => CustomerUpdatePageAction::class,
+            'allowed_methods' => ['GET', 'POST'],
+            'options' => [
+                'tokens' => [
+                    'id' => '\d+'
+                ]
+            ]
+        ],
+        [
+            'name' => 'customer.remove',
+            'path' => '/admin/customers/remove/{id}',
+            'middleware' => CustomerRemovePageAction::class,
+            'allowed_methods' => ['GET', 'POST'],
+            'options' => [
+                'tokens' => [
+                    'id' => '\d+'
+                ]
+            ]
         ],
     ],
 ];

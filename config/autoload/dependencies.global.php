@@ -1,5 +1,11 @@
 <?php
 
+use Aura\Session\Session;
+use CodeEmailMKT\Domain\Persistence\CustomerRepositoryInterface;
+use CodeEmailMKT\Domain\Service\FlashMessageInterface;
+use CodeEmailMKT\Infrastructure\Persistence\Doctrine\Repository\CustomerRepositoryFactory;
+use CodeEmailMKT\Infrastructure\Service\FlashMessageFactory;
+use DaMess\Factory\AuraSessionFactory;
 use Zend\Expressive\Application;
 use Zend\Expressive\Container\ApplicationFactory;
 use Zend\Expressive\Helper;
@@ -20,6 +26,9 @@ return [
         'factories' => [
             Application::class => ApplicationFactory::class,
             Helper\UrlHelper::class => Helper\UrlHelperFactory::class,
+            CustomerRepositoryInterface::class => CustomerRepositoryFactory::class,
+            Session::class => AuraSessionFactory::class,
+            FlashMessageInterface::class => FlashMessageFactory::class,
         ],
         'aliases' => [
             'configuration' => 'config', //Doctrine needs a service called Configuration
