@@ -2,13 +2,15 @@
 
 namespace CodeEmailMKT\Infrastructure\Persistence\Doctrine\Repository;
 
+use CodeEmailMKT\Domain\Entity\Customer;
+use CodeEmailMKT\Domain\Entity\Tag;
 use CodeEmailMKT\Domain\Persistence\CustomerRepositoryInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\UnitOfWork;
 
 class CustomerRepository extends EntityRepository implements CustomerRepositoryInterface
 {
-    public function create($entity)
+    public function create($entity) : Customer
     {
         $this->getEntityManager()->persist($entity);
         $this->getEntityManager()->flush();
@@ -16,7 +18,7 @@ class CustomerRepository extends EntityRepository implements CustomerRepositoryI
         return $entity;
     }
 
-    public function update($entity)
+    public function update($entity) : Customer
     {
         if ($this->getEntityManager()->getUnitOfWork()->getEntityState($entity) != UnitOfWork::STATE_MANAGED) {
             $this->getEntityManager()->merge($entity);
@@ -33,14 +35,25 @@ class CustomerRepository extends EntityRepository implements CustomerRepositoryI
         $this->getEntityManager()->flush();
     }
 
-    public function find($id)
+    public function find($id) : Customer
     {
         return parent::find($id);
     }
 
-    public function findAll()
+    public function findAll() : array
     {
         return parent::findAll();
+    }
+
+    public function findByTags(array $tags) : array
+    {
+        $qb = $this->createQueryBuilder('c')
+            ->distinct()
+            ->leftJoin(Tag::class, 't')
+            ->andWhere('t.id IN (:tag_ids)')
+            ->setParameter('tag_ids', $tags);
+
+        return $qb->getQuery()->getResult();
     }
 }
 

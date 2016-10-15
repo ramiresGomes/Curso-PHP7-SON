@@ -1,14 +1,29 @@
 <?php
 
-use Aura\Session\Session;
+use CodeEdu\FixtureFactory;
+
+use CodeEmailMKT\Domain\Persistence\CampaignRepositoryInterface;
 use CodeEmailMKT\Domain\Persistence\CustomerRepositoryInterface;
-use CodeEmailMKT\Domain\Service\FlashMessageInterface;
+use CodeEmailMKT\Domain\Persistence\TagRepositoryInterface;
+use CodeEmailMKT\Infrastructure\Persistence\Doctrine\Repository\CampaignRepositoryFactory;
 use CodeEmailMKT\Infrastructure\Persistence\Doctrine\Repository\CustomerRepositoryFactory;
-use CodeEmailMKT\Infrastructure\Service\FlashMessageFactory;
-use DaMess\Factory\AuraSessionFactory;
-use Zend\Expressive\Application;
-use Zend\Expressive\Container\ApplicationFactory;
-use Zend\Expressive\Helper;
+
+use CodeEmailMKT\Domain\Service\{
+    AuthInterface, CampaignEmailSenderInterface, CampaignReportInterface, FlashMessageInterface
+};
+
+use CodeEmailMKT\Infrastructure\Persistence\Doctrine\Repository\TagRepositoryFactory;
+use CodeEmailMKT\Infrastructure\Service\{
+    AuthServiceFactory, CampaignEmailSenderFactory, CampaignReportFactory, FlashMessageFactory, MailgunFactory
+};
+
+use Mailgun\Mailgun;
+use Zend\{
+    Authentication\AuthenticationService,
+    Expressive\Application,
+    Expressive\Container\ApplicationFactory,
+    Expressive\Helper
+};
 
 return [
     // Provides application-wide services.
@@ -27,11 +42,19 @@ return [
             Application::class => ApplicationFactory::class,
             Helper\UrlHelper::class => Helper\UrlHelperFactory::class,
             CustomerRepositoryInterface::class => CustomerRepositoryFactory::class,
-            Session::class => AuraSessionFactory::class,
+            TagRepositoryInterface::class => TagRepositoryFactory::class,
+            CampaignRepositoryInterface::class => CampaignRepositoryFactory::class,
             FlashMessageInterface::class => FlashMessageFactory::class,
+            'doctrine:fixtures_cmd:load' => FixtureFactory::class,
+            AuthInterface::class => AuthServiceFactory::class,
+            Mailgun::class => MailgunFactory::class,
+            CampaignEmailSenderInterface::class => CampaignEmailSenderFactory::class,
+            CampaignReportInterface::class => CampaignReportFactory::class,
         ],
         'aliases' => [
-            'configuration' => 'config', //Doctrine needs a service called Configuration
+            'Configuration' => 'config', //Doctrine needs a service called Configuration
+            'Config' => 'config', //Doctrine needs a service called Configuration
+            AuthenticationService::class => 'doctrine.authenticationservice.orm_default'
         ],
     ],
 ];

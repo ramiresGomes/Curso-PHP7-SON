@@ -28,7 +28,21 @@ class BootstrapMiddleware
     {
         $this->bootstrap->create();
         $request = $request->withAttribute('flash', $this->flash);
+        $request = $this->spoothingMethod($request);
 
         return $next($request, $response);
+    }
+
+    protected function spoothingMethod(ServerRequestInterface $request)
+    {
+        $data = $request->getParsedBody();
+        $method = $data['_method'] ?? null;
+        $method = strtoupper($method);
+
+        if (in_array($method, ['PUT', 'DELETE'])) {
+            $request = $request->withMethod($method);
+        }
+
+        return $request;
     }
 }

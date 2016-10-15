@@ -1,9 +1,16 @@
 <?php
 
+use CodeEmailMKT\Application\Middleware\{
+    AuthenticationMiddleware,
+    AuthenticationMiddlewareFactory,
+    TwigMiddleware,
+    TwigMiddlewareFactory,
+    BootstrapMiddleware,
+    BootstrapMiddlewareFactory
+};
+
 use Zend\Expressive\Container\ApplicationFactory;
 use Zend\Expressive\Helper;
-use CodeEmailMKT\Application\Middleware\BootstrapMiddleware;
-use CodeEmailMKT\Application\Middleware\BootstrapMiddlewareFactory;
 
 return [
     'dependencies' => [
@@ -11,6 +18,8 @@ return [
             Helper\ServerUrlMiddleware::class => Helper\ServerUrlMiddlewareFactory::class,
             Helper\UrlHelperMiddleware::class => Helper\UrlHelperMiddlewareFactory::class,
             BootstrapMiddleware::class => BootstrapMiddlewareFactory::class,
+            TwigMiddleware::class => TwigMiddlewareFactory::class,
+            AuthenticationMiddleware::class => AuthenticationMiddlewareFactory::class,
         ],
     ],
     // This can be used to seed pre- and/or post-routing middleware
@@ -45,8 +54,15 @@ return [
                 // - modifications to outgoing responses
                 Helper\ServerUrlMiddleware::class,
                 BootstrapMiddleware::class,
+                TwigMiddleware::class,
             ],
             'priority' => 10000,
+        ],
+        'admin' => [
+            'path' => '/admin',
+            'middleware' => [
+                AuthenticationMiddleware::class
+            ],
         ],
 
         'routing' => [

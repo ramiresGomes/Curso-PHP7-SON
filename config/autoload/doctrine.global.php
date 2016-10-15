@@ -1,5 +1,7 @@
 <?php
 
+use CodeEmailMKT\Domain\Entity\User;
+
 return [
     'doctrine' => [
         'connection' => [
@@ -27,6 +29,17 @@ return [
                 'drivers' => [
                     'CodeEmailMKT\Domain\Entity' => 'CodeEmailMKT_driver'
                 ]
+            ]
+        ],
+        'authentication' => [
+            'orm_default' => [
+                'object_manager' => Doctrine\ORM\EntityManager::class,
+                'identity_class' => User::class,
+                'identity_property' => 'email',
+                'credential_property' => 'password',
+                'credential_callable' => function (User $user, $passwordGiven) {
+                    return password_verify($passwordGiven, $user->getPassword());
+                }
             ]
         ]
     ]

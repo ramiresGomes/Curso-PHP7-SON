@@ -1,6 +1,14 @@
 {% extends '@layout/default.html.twig' %}
 
 {% block content %}
+
+    {% include '@app/customer/_form-elements.html.twig' %}
+
+    {% do form.get('submit').setAttribute('class', 'btn btn-success').setLabel('Salvar') %}
+
+    {% do form.setAttribute('action', url('customer.update', {id: form.getObject().id})) %}
+    {% do form.prepare() %}
+
     <div class="row">
         <div class="col-xs-12">
             <div class="box box-primary">
@@ -13,23 +21,12 @@
                 </div>
 
                 <div class="box-body">
-                    <form action="{{ url('customer.update', {id: customer.id}) }}" name="form" method="post" role="form">
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label for="name">Nome</label>
-                                <input type="text" name="name" id="name" class="form-control" value="{{ customer.name }}">
-                            </div>
+                    {{ form().openTag(form) | raw }}
+                    {{ formHidden(form.get('_method')) }}
 
-                            <div class="form-group">
-                                <label for="email">Email</label>
-                                <input type="email" name="email" id="email" class="form-control" value="{{ customer.email }}" required>
-                            </div>
-                        </div>
+                    {% include '@app/customer/_form.html.twig' %}
 
-                        <div class="box-footer">
-                            <button class="btn btn-success" type="submit">Salvar</button>
-                        </div>
-                    </form>
+                    {{ form().closeTag() | raw }}
                 </div>
             </div>
         </div>
@@ -41,5 +38,5 @@
 {% endblock %}
 
 {%  block page_header %}
-    Edição de Contato - {{ customer.name }}
+    Edição de Contato - {{ form.getObject().name }}
 {% endblock %}

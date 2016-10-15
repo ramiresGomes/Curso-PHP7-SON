@@ -2,7 +2,8 @@
 
 namespace CodeEmailMKT\Application\Action\Customer;
 
-use CodeEmailMKT\Domain\Entity\Customer;
+use CodeEmailMKT\Application\Form\CustomerForm;
+use CodeEmailMKT\Domain\Service\FlashMessageInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -19,20 +20,27 @@ class CustomerCreatePageAction
      * @var CustomerRepositoryInterface
      */
     private $repository;
+
     /**
      * @var RouterInterface
      */
     private $router;
+    /**
+     * @var CustomerForm
+     */
+    private $form;
 
     public function __construct(
         CustomerRepositoryInterface $repository,
         Template\TemplateRendererInterface $template,
-        RouterInterface $router
+        RouterInterface $router,
+        CustomerForm $form
     )
     {
         $this->template = $template;
         $this->repository = $repository;
         $this->router = $router;
+        $this->form = $form;
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response, callable $next = null)
@@ -40,22 +48,24 @@ class CustomerCreatePageAction
         if ($request->getMethod() == 'POST') {
             $flash = $request->getAttribute('flash');
 
-            $data = $request->getParsedBody();
+            $dataRaw = $request->getParsedBody();
+            $this->form->setData($dataRaw);
 
-            $entity = new Customer();
-            $entity->setName($data['name']);
-            $entity->setEmail($data['email']);
+            if ($this->form->isValid()) {
+                $entity = $this->form->getData();
+                $this->repository->create($entity);
 
-            $this->repository->create($entity);
+                $flash->setMessage(FlashMessageInterface::MESSAGE_SUCCESS, "Contato cadastrado com sucesso!");
 
-            $flash = $request->getAttribute('flash');
-            $flash->setMessage('success', "Contato cadastrado com sucesso!");
+                $uri = $this->router->generateUri('customer.list');
 
-            $uri = $this->router->generateUri('customer.list');
+                return new RedirectResponse($uri);
+            }
 
-            return new RedirectResponse($uri);
         }
 
-        return new HtmlResponse($this->template->render('app::customer/create'));
+        return new HtmlResponse($this->template->render('app::customer/create', [
+            'form' => $this->form
+        ]));
     }
 }

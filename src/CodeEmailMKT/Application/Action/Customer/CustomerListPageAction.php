@@ -2,6 +2,7 @@
 
 namespace CodeEmailMKT\Application\Action\Customer;
 
+use CodeEmailMKT\Domain\Service\FlashMessageInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Zend\Diactoros\Response\HtmlResponse;
@@ -30,7 +31,7 @@ class CustomerListPageAction
 
         return new HtmlResponse($this->template->render('app::customer/list', [
             'customers' => $customers,
-            'message' => $flash->getMessage('success')
+            'message' => $flash->getMessage(FlashMessageInterface::MESSAGE_SUCCESS)
         ]));
     }
 }

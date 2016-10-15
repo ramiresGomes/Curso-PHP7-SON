@@ -1,5 +1,7 @@
 <?php
 
+use CodeEmailMKT\Infrastructure\View\Twig\TwigRendererFactory;
+
 return [
     'dependencies' => [
         'factories' => [
@@ -7,7 +9,7 @@ return [
                 Zend\Expressive\Container\TemplatedErrorHandlerFactory::class,
 
             Zend\Expressive\Template\TemplateRendererInterface::class =>
-                Zend\Expressive\Twig\TwigRendererFactory::class,
+                TwigRendererFactory::class,
         ],
     ],
 

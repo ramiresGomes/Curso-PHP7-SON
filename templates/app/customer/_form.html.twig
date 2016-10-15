@@ -1,0 +1,30 @@
+{% set email = form.get('email') %}
+
+<div class="box-body">
+    <div class="col-md-4">
+        <div class="form-group">
+            {{ formRow(form.get('name')) }}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        {% set message = formElementErrors(email, {class: 'help-block'}) %}
+        <div class="form-group {{ message ? 'has-error' }}">
+            {{ formLabel(email) }}
+            {{ formElement(email) }}
+            {{ message | raw }}
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="form-group">
+            {{ formRow(form.get('tags')) }}
+        </div>
+    </div>
+</div>
+
+<div class="box-footer">
+    <div class="col-xs-12 text-right">
+        {{ formButton(form.get('submit')) }}
+    </div>
+</div>
