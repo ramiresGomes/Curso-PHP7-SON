@@ -47,4 +47,9 @@ class AuthService implements AuthInterface
     {
         $this->authenticationService->clearIdentity();
     }
+
+    public function getOla()
+    {
+        return "ola";
+    }
 }

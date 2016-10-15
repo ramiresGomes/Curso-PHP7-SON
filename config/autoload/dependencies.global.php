@@ -19,10 +19,7 @@ use CodeEmailMKT\Infrastructure\Service\{
 
 use Mailgun\Mailgun;
 use Zend\{
-    Authentication\AuthenticationService,
-    Expressive\Application,
-    Expressive\Container\ApplicationFactory,
-    Expressive\Helper
+    Authentication\AuthenticationService, Expressive\Application, Expressive\Container\ApplicationFactory, Expressive\Helper
 };
 
 return [

@@ -24,10 +24,9 @@
                                 </span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Destinatários</span>
-                                    <span class="info-box-number">{{ customers_count }}</span>
-                                    <span class="info-box-text">Lista</span>
                                     <span class="info-box-number">{{ campaign.name }}</span>
+                                    <br>
+                                    <span class="info-box-text">Destinatários: (<b>{{ customers_count }}</b>)</span>
                                 </div>
                             </div>
                         </div>
@@ -39,11 +38,11 @@
                                 </span>
 
                                 <div class="info-box-content">
-                                    <span class="info-box-text">Criado em:</span>
-                                    <span class="info-box-number">{{ campaign_data.created_at | date('d/m/Y') }}</span>
-                                    <span class="info-box-text">Ações</span>
+                                    <span class="info-box-text">Criado em: <b>{{ campaign_data.created_at | date('d/m/Y') }}</b></span>
+                                    <br>
                                     <span class="info-box-number">
-                                        <a href="#">Visualizar e-mail</a> | <a href="#">Imprimir</a>
+                                        <a class="btn bg-yellow-active" href="#">Visualizar e-mail</a>&nbsp;
+                                        <a class="btn bg-yellow-active" href="#">Imprimir</a>
                                     </span>
                                 </div>
                             </div>
@@ -88,20 +87,20 @@
                         <table class="table table-bordered">
                             <tbody>
                             <tr>
-                                <td>
-                                    <h3>Aberturas</h3>
+                                <td class="text-center">
+                                    <h4>Aberturas</h4>
                                     <p>{{ campaign_data.opened_count }}</p>
                                 </td>
-                                <td>
-                                    <h3>Cliques</h3>
+                                <td class="text-center">
+                                    <h4>Cliques</h4>
                                     <p>{{ campaign_data.clicked_count }}</p>
                                 </td>
-                                <td>
-                                    <h3>Não abriram</h3>
+                                <td class="text-center">
+                                    <h4>Não abriram</h4>
                                     <p>{{ campaign_data.delivered_count - opened_distinct_count }}</p>
                                 </td>
-                                <td>
-                                    <h3>Cancelaram</h3>
+                                <td class="text-center">
+                                    <h4>Cancelaram</h4>
                                     <p>{{ campaign_data.unsubscribed_count }}</p>
                                 </td>
                             </tr>
