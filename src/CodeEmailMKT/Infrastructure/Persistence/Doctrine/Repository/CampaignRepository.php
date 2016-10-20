@@ -23,7 +23,7 @@ class CampaignRepository extends EntityRepository implements CampaignRepositoryI
             $this->getEntityManager()->merge($entity);
         }
 
-        $this->getEntityManager()->flush($entity);
+        $this->getEntityManager()->flush();
 
         return $entity;
     }
